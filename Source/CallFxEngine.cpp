@@ -8,7 +8,6 @@ namespace gumzyy
 namespace
 {
 constexpr float pi = 3.14159265358979323846f;
-constexpr float epsilon = 1.0e-6f;
 }
 
 void CallFxEngine::Smoother::setTarget(float value, int samples) noexcept
@@ -114,6 +113,7 @@ void CallFxEngine::reset()
     for (auto& channel : hpState_) channel.fill(0.0f);
     for (auto& channel : lpState_) channel.fill(0.0f);
     airLowState_.fill(0.0f);
+    shimmerLowState_.fill(0.0f);
     toneLowState_.fill(0.0f);
     crushCounter_.fill(0);
     crushedHold_.fill(0.0f);
@@ -122,10 +122,10 @@ void CallFxEngine::reset()
     for (auto& channel : combs_) for (auto& comb : channel) comb.reset();
     for (auto& channel : allpasses_) for (auto& allpass : channel) allpass.reset();
 
-    hp_.reset(80.0f); lp_.reset(18000.0f); inputGain_.reset(1.0f); tone_.reset(0.0f);
-    air_.reset(3.5f); drive_.reset(10.0f);
-    crush_.reset(0.0f); width_.reset(140.0f); reverb_.reset(30.0f); delay_.reset(18.0f);
-    delayTime_.reset(280.0f); feedback_.reset(24.0f); mix_.reset(100.0f); outputGain_.reset(1.0f);
+    hp_.reset(85.0f); lp_.reset(18000.0f); inputGain_.reset(1.0f); tone_.reset(24.0f);
+    air_.reset(8.0f); shimmer_.reset(62.0f); drive_.reset(5.0f);
+    crush_.reset(0.0f); width_.reset(158.0f); reverb_.reset(48.0f); delay_.reset(22.0f);
+    delayTime_.reset(430.0f); feedback_.reset(26.0f); mix_.reset(100.0f); outputGain_.reset(1.0f);
     inputPeak_ = outputPeak_ = 0.0f;
 }
 
@@ -141,6 +141,7 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
     inputGain_.setTarget(std::pow(10.0f, clampFinite(p.inputDb, -18.0f, 18.0f, 0.0f) / 20.0f), rampSamples);
     tone_.setTarget(clampFinite(p.tone, -100.0f, 100.0f, 0.0f), rampSamples);
     air_.setTarget(clampFinite(p.airDb, 0.0f, 12.0f, 0.0f), rampSamples);
+    shimmer_.setTarget(clampFinite(p.shimmer, 0.0f, 100.0f, 0.0f), rampSamples);
     drive_.setTarget(clampFinite(p.drive, 0.0f, 100.0f, 0.0f), rampSamples);
     crush_.setTarget(clampFinite(p.crush, 0.0f, 100.0f, 0.0f), rampSamples);
     width_.setTarget(clampFinite(p.width, 0.0f, 200.0f, 100.0f), rampSamples);
@@ -163,6 +164,7 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
         const float inputGain = inputGain_.next();
         const float toneAmount = tone_.next();
         const float airDb = air_.next();
+        const float shimmerAmount = shimmer_.next() * 0.01f;
         const float driveAmount = drive_.next();
         const float crushAmount = std::min(100.0f, crush_.next() + styleCrush[style]);
         const float widthAmount = width_.next() * 0.01f;
@@ -176,6 +178,7 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
         const float hpAlpha = onePoleAlpha(hpCut, static_cast<float>(sampleRate_));
         const float lpAlpha = onePoleAlpha(lpCut, static_cast<float>(sampleRate_));
         const float airAlpha = onePoleAlpha(6200.0f, static_cast<float>(sampleRate_));
+        const float shimmerAlpha = onePoleAlpha(4700.0f, static_cast<float>(sampleRate_));
         const float toneAlpha = onePoleAlpha(850.0f, static_cast<float>(sampleRate_));
         const float toneDb = toneAmount * 0.075f;
         const float toneHighGain = std::exp2(toneDb * 0.5f * 0.1660964f);
@@ -224,6 +227,18 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
             airLow += airAlpha * (x - airLow);
             const float airHigh = x - airLow;
             x += airHigh * airGain;
+
+            // Zero-latency harmonic shimmer exciter on the upper band. This is a
+            // high-frequency waveshaping stage (not a pitch shifter): it adds
+            // controllable harmonics without look-ahead, FFT or buffered latency.
+            auto& shimmerLow = shimmerLowState_[static_cast<std::size_t>(ch)];
+            shimmerLow += shimmerAlpha * (x - shimmerLow);
+            const float shimmerBand = x - shimmerLow;
+            if (shimmerAmount > 0.0005f)
+            {
+                const float excited = fastTanh(shimmerBand * (1.0f + shimmerAmount * 7.0f));
+                x += (excited - shimmerBand) * shimmerAmount * 0.72f;
+            }
 
             // Lightweight waveshaping: no look-ahead, oversampling or extra host latency.
             const float saturated = fastTanh(x * driveGain);

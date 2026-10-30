@@ -1,20 +1,22 @@
-GUMZYY CALL FX v0.2.1 - WORKFLOW UPDATE
+GUMZYY CALL FX v0.3.0 - WORKFLOW UPDATE
 
 1) Extract this ZIP into a new folder. Do not mix it with OFF SESSION TUNE or v0.1.0.
 2) Run Publish-To-GitHub.bat. The helper reuses sleeepboii123-bot/Gumzyy-Call-FX and pushes the updated project files to main.
 3) Open the repository Actions tab and wait for the Windows x64 build and DSP tests.
-4) Download GUMZYY-CALL-FX-v0.2.1-Windows-x64-VST3 from the successful run.
+4) Download GUMZYY-CALL-FX-v0.3.0-FINAL-Windows-x64-VST3 from the successful run.
 5) Extract the artifact and double-click Install-GUMZYY-CALL-FX.bat. The installer requests administrator permission automatically.
 6) Restart Ableton Live or rescan VST3 plug-ins.
 
-WORKFLOW UPDATES:
-- Six one-click ad-lib character chains: ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
-- Input Gain and Tone are real DSP controls and are automatable in Ableton.
-- Live IN/OUT peak meters.
-- A/B settings comparison, controlled RANDOM, RESET and BIG/SMALL view.
-- Tooltips and double-click knob reset.
+FINAL DESIGN UPDATES:
+- The real JUCE window is rebuilt around the retro telephone handset, call display and GUMZYY artwork.
+- Six large one-click character chains: ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
+- Four large modules: VOICE/FILTER, ANGEL/STEREO, COLOR/GRIT and SPACE/ECHO.
+- Dedicated SHIMMER harmonic exciter, in addition to Input, Tone, Air, Width, Drive, Crush, Reverb and Delay.
+- Big readable controls, numerical value boxes, live IN/OUT meters and a global wet/dry slider.
+- A/B snapshots, DICE variation, RESET, BYPASS, BIG/SMALL, tooltips and double-click knob reset.
+- Every visible knob controls a real DSP parameter and is host-automatable.
 
 LOW LATENCY:
 The engine keeps a sample-by-sample, zero-lookahead design and declares 0 samples of plugin latency. Delay and reverb are intentional effects on the wet path; they do not delay the direct path. This is not a claim of zero total recording latency. CPU load, stability, sound quality and the JUCE editor still need Windows/Ableton verification.
 
-The installer now requests administrator permission before copying to the protected Common Files VST3 folder.
+The installer requests administrator permission before copying to the protected Common Files VST3 folder.

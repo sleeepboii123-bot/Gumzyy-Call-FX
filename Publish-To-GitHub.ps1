@@ -90,7 +90,7 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Host 'Repository already contains the exact project files.' -ForegroundColor Green
     } else {
-        & git commit -m 'Create GUMZYY CALL FX low-latency ad-lib plugin'
+        & git commit -m 'Update GUMZYY CALL FX v0.3.0 final telephone UI and shimmer DSP'
         if ($LASTEXITCODE -ne 0) { throw 'Git commit failed.' }
         & git push origin HEAD:main
         if ($LASTEXITCODE -ne 0) { throw 'Git push failed.' }

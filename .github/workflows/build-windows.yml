@@ -34,7 +34,7 @@ jobs:
           Copy-Item Install-GUMZYY-CALL-FX.ps1 release/
           Copy-Item Install-GUMZYY-CALL-FX.bat release/
           @"
-          GUMZYY CALL FX - Windows VST3
+          GUMZYY CALL FX v0.3.0 FINAL DESIGN - Windows VST3
 
           INSTALL:
           1. Extract this package.
@@ -42,14 +42,14 @@ jobs:
           3. Restart Ableton Live or rescan VST3 plug-ins.
           4. Find GUMZYY CALL FX under VST3 audio effects.
 
-          The DSP is designed for a zero-sample host latency path. Delay and reverb are intentional wet effects.
+          The DSP declares 0 samples of plugin latency. Delay and reverb are intentional wet effects; the dry path is never delayed.
           Performance and sound should still be tested in the user's DAW before production use.
           "@ | Set-Content release\INSTALL.txt
 
       - name: Upload installable Windows package
         uses: actions/upload-artifact@v4
         with:
-          name: GUMZYY-CALL-FX-v0.2.0-Windows-x64-VST3
+          name: GUMZYY-CALL-FX-v0.3.0-FINAL-Windows-x64-VST3
           path: release/
           if-no-files-found: error
           retention-days: 14

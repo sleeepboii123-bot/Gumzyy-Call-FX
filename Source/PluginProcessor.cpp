@@ -13,25 +13,25 @@ juce::AudioProcessorValueTreeState::ParameterLayout GumzyyCallFXAudioProcessor::
         juce::StringArray { "ANGEL", "PHONE", "RADIO", "WALKIE", "MEGAPHONE", "BROKEN" }, 0));
     params.push_back(std::make_unique<Bool>(juce::ParameterID { "bypass", 1 }, "Bypass", false));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "hp", 1 }, "High Pass",
-        juce::NormalisableRange<float>(20.0f, 1200.0f, 1.0f, 0.38f), 80.0f, " Hz"));
+        juce::NormalisableRange<float>(20.0f, 1200.0f, 1.0f, 0.38f), 85.0f, " Hz"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "lp", 1 }, "Low Pass",
         juce::NormalisableRange<float>(1000.0f, 20000.0f, 1.0f, 0.45f), 18000.0f, " Hz"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "air", 1 }, "Air",
-        juce::NormalisableRange<float>(0.0f, 12.0f, 0.01f), 3.5f, " dB"));
+        juce::NormalisableRange<float>(0.0f, 12.0f, 0.01f), 8.0f, " dB"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "drive", 1 }, "Drive",
-        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 10.0f, "%"));
+        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 5.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "crush", 1 }, "Crush",
         juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 0.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "width", 1 }, "Width",
-        juce::NormalisableRange<float>(0.0f, 200.0f, 0.1f), 140.0f, "%"));
+        juce::NormalisableRange<float>(0.0f, 200.0f, 0.1f), 158.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "reverb", 1 }, "Reverb",
-        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 30.0f, "%"));
+        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 48.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "delay", 1 }, "Delay",
-        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 18.0f, "%"));
+        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 22.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "delayTime", 1 }, "Delay Time",
-        juce::NormalisableRange<float>(60.0f, 800.0f, 1.0f, 0.5f), 280.0f, " ms"));
+        juce::NormalisableRange<float>(60.0f, 800.0f, 1.0f, 0.5f), 430.0f, " ms"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "feedback", 1 }, "Feedback",
-        juce::NormalisableRange<float>(0.0f, 75.0f, 0.1f), 24.0f, "%"));
+        juce::NormalisableRange<float>(0.0f, 75.0f, 0.1f), 26.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "mix", 1 }, "Mix",
         juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 100.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "output", 1 }, "Output",
@@ -40,7 +40,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout GumzyyCallFXAudioProcessor::
     params.push_back(std::make_unique<Float>(juce::ParameterID { "input", 1 }, "Input Gain",
         juce::NormalisableRange<float>(-18.0f, 18.0f, 0.01f), 0.0f, " dB"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "tone", 1 }, "Tone",
-        juce::NormalisableRange<float>(-100.0f, 100.0f, 0.1f), 0.0f, "%"));
+        juce::NormalisableRange<float>(-100.0f, 100.0f, 0.1f), 24.0f, "%"));
+    // Added as a new stable ID so older projects retain all existing automation.
+    params.push_back(std::make_unique<Float>(juce::ParameterID { "shimmer", 1 }, "Shimmer",
+        juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 62.0f, "%"));
 
     return { params.begin(), params.end() };
 }
@@ -96,6 +99,7 @@ void GumzyyCallFXAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
     p.inputDb = parameters.getRawParameterValue("input")->load(std::memory_order_relaxed);
     p.tone = parameters.getRawParameterValue("tone")->load(std::memory_order_relaxed);
     p.airDb = parameters.getRawParameterValue("air")->load(std::memory_order_relaxed);
+    p.shimmer = parameters.getRawParameterValue("shimmer")->load(std::memory_order_relaxed);
     p.drive = parameters.getRawParameterValue("drive")->load(std::memory_order_relaxed);
     p.crush = parameters.getRawParameterValue("crush")->load(std::memory_order_relaxed);
     p.width = parameters.getRawParameterValue("width")->load(std::memory_order_relaxed);

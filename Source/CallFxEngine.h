@@ -13,6 +13,7 @@ struct CallFxParameters
     float tone = 0.0f;          // -100..+100, broad low/high tilt
     float lowPassHz = 18000.0f;
     float airDb = 3.5f;
+    float shimmer = 0.0f;      // 0..100, zero-latency high-band harmonic exciter
     float drive = 10.0f;        // 0..100
     float crush = 0.0f;         // 0..100
     float width = 140.0f;       // 0..200
@@ -74,6 +75,7 @@ private:
     std::array<std::array<float, 2>, 2> hpState_ {};
     std::array<std::array<float, 2>, 2> lpState_ {};
     std::array<float, 2> airLowState_ {};
+    std::array<float, 2> shimmerLowState_ {};
     std::array<float, 2> toneLowState_ {};
     std::array<int, 2> crushCounter_ {};
     std::array<float, 2> crushedHold_ {};
@@ -83,7 +85,7 @@ private:
     std::array<std::array<Comb, 4>, 2> combs_;
     std::array<std::array<Allpass, 2>, 2> allpasses_;
 
-    Smoother hp_, lp_, inputGain_, tone_, air_, drive_, crush_, width_, reverb_, delay_, delayTime_, feedback_, mix_, outputGain_;
+    Smoother hp_, lp_, inputGain_, tone_, air_, shimmer_, drive_, crush_, width_, reverb_, delay_, delayTime_, feedback_, mix_, outputGain_;
     float inputPeak_ = 0.0f, outputPeak_ = 0.0f;
 };
 } // namespace gumzyy

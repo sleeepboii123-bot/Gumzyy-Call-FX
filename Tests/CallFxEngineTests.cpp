@@ -132,6 +132,20 @@ int main()
     require(brightToneRms > darkToneRms * 1.65f,
             "Tone control should audibly tilt high-frequency content");
 
+
+    // Harmonic shimmer is a real upper-band exciter and leaves the dry mix path untouched.
+    gumzyy::CallFxParameters shimmerParams;
+    shimmerParams.highPassHz = 20.0f; shimmerParams.lowPassHz = 20000.0f;
+    shimmerParams.inputDb = 0.0f; shimmerParams.tone = 0.0f; shimmerParams.airDb = 0.0f;
+    shimmerParams.drive = 0.0f; shimmerParams.crush = 0.0f; shimmerParams.width = 100.0f;
+    shimmerParams.reverb = 0.0f; shimmerParams.delay = 0.0f; shimmerParams.mix = 100.0f;
+    shimmerParams.shimmer = 0.0f;
+    const float cleanHighRms = renderSineRms(shimmerParams, sr, 7200.0f);
+    shimmerParams.shimmer = 100.0f;
+    const float shimmerHighRms = renderSineRms(shimmerParams, sr, 7200.0f);
+    require(shimmerHighRms > cleanHighRms * 1.08f,
+            "Shimmer must add audible high-band harmonic energy when raised");
+
     // Different common project sample rates and irregular block lengths must remain stable.
     for (double testRate : { 44100.0, 48000.0, 96000.0 })
     {

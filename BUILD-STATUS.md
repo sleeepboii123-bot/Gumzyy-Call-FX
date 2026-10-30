@@ -1,22 +1,17 @@
-# Build status — GUMZYY CALL FX v0.2.1 WORKFLOW
+# Build status - GUMZYY CALL FX v0.3.0 FINAL DESIGN
 
-- [x] Retained the sample-by-sample DSP path from v0.1.0.
-- [x] Added Input Gain and Tone as automatable DSP parameters.
-- [x] Reworked the UI into a workflow-first layout with six quick character buttons.
-- [x] Added real input/output peak meters sourced from the audio processor.
-- [x] Added tooltips and double-click knob reset.
-- [x] Added controlled random variation per ad-lib character.
-- [x] Added A/B snapshots for comparing two full effect settings.
-- [x] Added reset-to-character and compact/full UI switching.
-- [x] Removed non-ASCII glyphs from interface labels to avoid Windows font/codepage artefacts.
-- [ ] Windows MSVC build and VST3 packaging.
-- [ ] Verify all parameters respond audibly in Ableton Live.
-- [ ] Check A/B, randomize, reset, automation, and UI resize in Ableton.
-- [ ] Listening tests for ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
+- [x] Real editor rebuilt around the accepted telephone / receiver / GUMZYY concept.
+- [x] Six large one-click ad-lib character chains: ANGEL, PHONE, RADIO, WALKIE, MEGA, BROKEN.
+- [x] Four effect modules with consistent typography, spacing, large rotary controls and visible value boxes.
+- [x] BIG / SMALL mode, A/B snapshots, DICE random variation, RESET and bypass.
+- [x] Live input/output meters, wet/dry slider and output trim.
+- [x] Added SHIMMER high-band harmonic exciter with APVTS automation.
+- [x] Existing APVTS parameter IDs preserved; new shimmer parameter appended.
+- [x] No look-ahead / no FFT / no oversampling / no new delay buffer in the input path.
+- [x] Processor continues to declare 0 samples of plugin latency; delay and reverb remain wet effects.
+- [ ] Local DSP tests (including shimmer response) passed on this package.
+- [ ] Windows MSVC compile and DSP CI pass.
+- [ ] Install / scan / visual verification in Ableton Live.
+- [ ] Listening, CPU and mono compatibility checks at 44.1 and 48 kHz.
 
-The engine keeps its zero-lookahead, sample-by-sample design and preallocated delay/reverb buffers. This is a zero-sample declared plugin latency path, not a claim of zero total recording latency. CPU and sound-quality checks still require a DAW session.
-
-
-## v0.2.1 build fix
-
-- Fixed the MSVC compile error C2371 in PluginEditor.cpp by giving the footer control layout its own variable name (`footerControlsY`). The panel layout retains `footerY`.
+Do not call this production-ready until the Windows build, Ableton test, and listening checks are complete.

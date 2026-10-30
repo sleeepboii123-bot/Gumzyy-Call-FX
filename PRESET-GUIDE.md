@@ -4,6 +4,8 @@ These are starting presets, not mastering targets. Match output level before com
 
 ## ANGEL
 
+- Shimmer: 45-70% for the high-band harmonic glow (not an octave pitch shifter)
+
 - Air: 6–9 dB
 - Width: 125–160%
 - Reverb: 35–60%
@@ -51,7 +53,7 @@ Designed for airy layers and wide ad-libs. It does not pitch-shift the vocal upw
 - Keep the DAW's input peak healthy; do not clip the interface before the plugin.
 
 
-## Workflow controls in v0.2.1
+## Workflow controls in v0.3.0
 
 - Character buttons load a useful starting chain. Adjust the knobs after loading; the buttons are starting points, not locked algorithms.
 - RANDOM generates a bounded variation around the selected character.
