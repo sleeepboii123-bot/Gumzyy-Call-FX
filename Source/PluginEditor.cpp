@@ -471,13 +471,13 @@ void GumzyyCallFXAudioProcessorEditor::resized()
                                static_cast<int>(cellW - 4.0f), knobHeight);
     }
 
-    const int footerY = h - (small ? 88 : 94);
+    const int footerControlsY = h - (small ? 88 : 94);
     const int footerX = margin + 14;
-    statusLabel_.setBounds(footerX, footerY + 8, small ? 160 : 238, 16);
-    mixLabel_.setBounds(w - (small ? 205 : 236), footerY + 5, 46, 14);
-    mix_.setBounds(w - (small ? 214 : 246), footerY + 16, small ? 82 : 100, small ? 50 : 58);
-    outputLabel_.setBounds(w - (small ? 112 : 124), footerY + 5, 60, 14);
-    output_.setBounds(w - (small ? 128 : 142), footerY + 16, small ? 82 : 100, small ? 50 : 58);
+    statusLabel_.setBounds(footerX, footerControlsY + 8, small ? 160 : 238, 16);
+    mixLabel_.setBounds(w - (small ? 205 : 236), footerControlsY + 5, 46, 14);
+    mix_.setBounds(w - (small ? 214 : 246), footerControlsY + 16, small ? 82 : 100, small ? 50 : 58);
+    outputLabel_.setBounds(w - (small ? 112 : 124), footerControlsY + 5, 60, 14);
+    output_.setBounds(w - (small ? 128 : 142), footerControlsY + 16, small ? 82 : 100, small ? 50 : 58);
 }
 
 void GumzyyCallFXAudioProcessorEditor::timerCallback()

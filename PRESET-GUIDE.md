@@ -51,7 +51,7 @@ Designed for airy layers and wide ad-libs. It does not pitch-shift the vocal upw
 - Keep the DAW's input peak healthy; do not clip the interface before the plugin.
 
 
-## Workflow controls in v0.2.0
+## Workflow controls in v0.2.1
 
 - Character buttons load a useful starting chain. Adjust the knobs after loading; the buttons are starting points, not locked algorithms.
 - RANDOM generates a bounded variation around the selected character.

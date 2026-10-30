@@ -1,4 +1,4 @@
-# GUMZYY CALL FX v0.2.0 - WORKFLOW UPDATE
+# GUMZYY CALL FX v0.2.1 - WORKFLOW UPDATE
 
 **NYXV × OFF SESSION — AD-LIB COLOR LAB**
 
@@ -47,7 +47,7 @@ Requirements: Git for Windows, GitHub CLI (`gh`) authenticated to GitHub, and a 
 2. Run `Publish-To-GitHub.bat`.
 3. The helper creates a new public repository named `sleeepboii123-bot/Gumzyy-Call-FX` if it does not exist, then pushes the project. It does not modify the former OFF-SESSION-TUNE repository.
 4. Open the repository's Actions tab and wait for the Windows x64 build and DSP tests.
-5. Download `GUMZYY-CALL-FX-v0.2.0-Windows-x64-VST3` from the successful run.
+5. Download `GUMZYY-CALL-FX-v0.2.1-Windows-x64-VST3` from the successful run.
 6. Extract the artifact and run `Install-GUMZYY-CALL-FX.bat`.
 
 ## Licensing note
@@ -56,6 +56,6 @@ JUCE 8.0.6 is dual-licensed under AGPLv3 or a commercial JUCE licence. Review th
 
 ## Project status
 
-This is **v0.2.0 — workflow update source candidate**. The DSP engine retains the v0.1.0 sample-by-sample path. Local DSP tests cover zero reported latency, dry-path integrity, phone filtering, crush stability, stereo processing and common sample rates. The updated JUCE editor still requires a Windows MSVC build, installation and listening/automation verification in Ableton Live.
+This is **v0.2.1 — workflow update source candidate**. The DSP engine retains the v0.1.0 sample-by-sample path. Local DSP tests cover zero reported latency, dry-path integrity, phone filtering, crush stability, stereo processing and common sample rates. The updated JUCE editor still requires a Windows MSVC build, installation and listening/automation verification in Ableton Live.
 
 The Windows installer now requests administrator permission automatically, waits for the elevated install to finish and returns its exit status.

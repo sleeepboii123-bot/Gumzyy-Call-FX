@@ -1,4 +1,4 @@
-# Build status — GUMZYY CALL FX v0.2.0 WORKFLOW
+# Build status — GUMZYY CALL FX v0.2.1 WORKFLOW
 
 - [x] Retained the sample-by-sample DSP path from v0.1.0.
 - [x] Added Input Gain and Tone as automatable DSP parameters.
@@ -15,3 +15,8 @@
 - [ ] Listening tests for ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
 
 The engine keeps its zero-lookahead, sample-by-sample design and preallocated delay/reverb buffers. This is a zero-sample declared plugin latency path, not a claim of zero total recording latency. CPU and sound-quality checks still require a DAW session.
+
+
+## v0.2.1 build fix
+
+- Fixed the MSVC compile error C2371 in PluginEditor.cpp by giving the footer control layout its own variable name (`footerControlsY`). The panel layout retains `footerY`.
