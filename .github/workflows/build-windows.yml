@@ -1,0 +1,55 @@
+name: Build GUMZYY CALL FX for Windows
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-x64:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Configure x64 Release build
+        run: cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+
+      - name: Compile VST3 and DSP tests
+        run: cmake --build build --config Release --parallel
+
+      - name: Run low-latency DSP validation
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Stage VST3 and installer
+        shell: pwsh
+        run: |
+          $plugin = Get-ChildItem -Path build -Directory -Recurse -Filter "*.vst3" | Select-Object -First 1
+          if (-not $plugin) { throw "VST3 bundle not found. Build did not produce an installable plugin." }
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item -Recurse -Force $plugin.FullName (Join-Path $PWD "release\$($plugin.Name)")
+          Copy-Item Install-GUMZYY-CALL-FX.ps1 release/
+          Copy-Item Install-GUMZYY-CALL-FX.bat release/
+          @"
+          GUMZYY CALL FX - Windows VST3
+
+          INSTALL:
+          1. Extract this package.
+          2. Double-click Install-GUMZYY-CALL-FX.bat and approve the Windows UAC prompt.
+          3. Restart Ableton Live or rescan VST3 plug-ins.
+          4. Find GUMZYY CALL FX under VST3 audio effects.
+
+          The DSP is designed for a zero-sample host latency path. Delay and reverb are intentional wet effects.
+          Performance and sound should still be tested in the user's DAW before production use.
+          "@ | Set-Content release\INSTALL.txt
+
+      - name: Upload installable Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: GUMZYY-CALL-FX-Windows-x64-VST3
+          path: release/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,9 @@
+GUMZYY CALL FX v0.1.0 — PUBLICADOR CORREGIDO
+
+La primera copia podia detenerse al consultar un repositorio que todavia no existia. Windows PowerShell convertia el mensaje de error de gh.exe en un error terminante por ErrorActionPreference=Stop.
+
+Esta copia captura el codigo de salida de gh repo view de forma segura y, si el repositorio aun no existe, continua con gh repo create. Si ya existe, lo reutiliza.
+
+No cambia el motor DSP ni toca el repositorio OFF-SESSION-TUNE.
+
+Ejecuta Publish-To-GitHub.bat desde esta carpeta corregida.
