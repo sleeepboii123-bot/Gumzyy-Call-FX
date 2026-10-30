@@ -1,4 +1,4 @@
-# GUMZYY CALL FX v0.1.0
+# GUMZYY CALL FX v0.2.0 - WORKFLOW UPDATE
 
 **NYXV × OFF SESSION — AD-LIB COLOR LAB**
 
@@ -26,11 +26,18 @@ A Windows VST3 effect concept for giving ad-libs and vocal doubles a recognisabl
 
 The style selector applies a starting preset by writing the exposed APVTS parameters. All knobs remain host-automatable in the DAW.
 
-## Controls
+## Controls and ad-lib workflow
 
-Bypass, High Pass, Low Pass, Air, Width, Drive, Crush, Reverb, Delay, Delay Time, Feedback, Mix and Output.
+- **FILTER / VOICE:** High Pass, Low Pass, Input Gain and Tone.
+- **ANGEL / STEREO:** Air and Width.
+- **COLOR / GRIT:** Drive and Crush.
+- **SPACE / ECHO:** Reverb, Delay, Delay Time and Feedback.
+- **Output strip:** live input/output peak meters, Mix and Output.
+- **Workflow:** six one-click character chains, A/B snapshots, bounded Random, Reset-to-character, Bypass and BIG/SMALL view.
 
-The UI has BIG and SMALL sizes, an actual bypass, and GUMZYY art embedded in the VST3 binary, so there are no external image dependencies at install time. See `PRESET-GUIDE.md` for ad-lib starting points.
+Every knob is attached to a real APVTS parameter, so it changes the DSP and is available for Ableton automation. Double-click a knob to reset it. A/B stores the current setup as A, captures your edited setup as B, then toggles between them. Random creates a controlled variation around the selected character rather than randomising every control across its full range.
+
+GUMZYY artwork is embedded in the VST3 binary, so there are no external image dependencies at install time. See `PRESET-GUIDE.md` for ad-lib starting points.
 
 ## Build on Windows
 
@@ -40,7 +47,7 @@ Requirements: Git for Windows, GitHub CLI (`gh`) authenticated to GitHub, and a 
 2. Run `Publish-To-GitHub.bat`.
 3. The helper creates a new public repository named `sleeepboii123-bot/Gumzyy-Call-FX` if it does not exist, then pushes the project. It does not modify the former OFF-SESSION-TUNE repository.
 4. Open the repository's Actions tab and wait for the Windows x64 build and DSP tests.
-5. Download `GUMZYY-CALL-FX-Windows-x64-VST3` from the successful run.
+5. Download `GUMZYY-CALL-FX-v0.2.0-Windows-x64-VST3` from the successful run.
 6. Extract the artifact and run `Install-GUMZYY-CALL-FX.bat`.
 
 ## Licensing note
@@ -49,4 +56,6 @@ JUCE 8.0.6 is dual-licensed under AGPLv3 or a commercial JUCE licence. Review th
 
 ## Project status
 
-This is **v0.1.0 — first build candidate source**. The DSP unit tests are intended to verify zero reported latency, dry-path integrity, phone filtering, finite crushed output and stereo processing. No Windows VST3 build or Ableton listening test has been run for this new project yet.
+This is **v0.2.0 — workflow update source candidate**. The DSP engine retains the v0.1.0 sample-by-sample path. Local DSP tests cover zero reported latency, dry-path integrity, phone filtering, crush stability, stereo processing and common sample rates. The updated JUCE editor still requires a Windows MSVC build, installation and listening/automation verification in Ableton Live.
+
+The Windows installer now requests administrator permission automatically, waits for the elevated install to finish and returns its exit status.

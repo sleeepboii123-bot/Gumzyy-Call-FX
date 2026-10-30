@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <cmath>
 
 juce::AudioProcessorValueTreeState::ParameterLayout GumzyyCallFXAudioProcessor::createParameterLayout()
 {
@@ -35,6 +36,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout GumzyyCallFXAudioProcessor::
         juce::NormalisableRange<float>(0.0f, 100.0f, 0.1f), 100.0f, "%"));
     params.push_back(std::make_unique<Float>(juce::ParameterID { "output", 1 }, "Output",
         juce::NormalisableRange<float>(-18.0f, 12.0f, 0.01f), 0.0f, " dB"));
+    // Added at the end so existing v0.1.0 automation IDs remain unchanged.
+    params.push_back(std::make_unique<Float>(juce::ParameterID { "input", 1 }, "Input Gain",
+        juce::NormalisableRange<float>(-18.0f, 18.0f, 0.01f), 0.0f, " dB"));
+    params.push_back(std::make_unique<Float>(juce::ParameterID { "tone", 1 }, "Tone",
+        juce::NormalisableRange<float>(-100.0f, 100.0f, 0.1f), 0.0f, "%"));
 
     return { params.begin(), params.end() };
 }
@@ -70,12 +76,25 @@ void GumzyyCallFXAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
 {
     juce::ScopedNoDenormals noDenormals;
     if (parameters.getRawParameterValue("bypass")->load(std::memory_order_relaxed) >= 0.5f)
+    {
+        float peak = 0.0f;
+        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+        {
+            const auto* data = buffer.getReadPointer(ch);
+            for (int i = 0; i < buffer.getNumSamples(); ++i)
+                peak = juce::jmax(peak, std::abs(data[i]));
+        }
+        inputPeak_.store(peak, std::memory_order_relaxed);
+        outputPeak_.store(peak, std::memory_order_relaxed);
         return;
+    }
 
     gumzyy::CallFxParameters p;
     p.style = static_cast<int>(parameters.getRawParameterValue("style")->load(std::memory_order_relaxed));
     p.highPassHz = parameters.getRawParameterValue("hp")->load(std::memory_order_relaxed);
     p.lowPassHz = parameters.getRawParameterValue("lp")->load(std::memory_order_relaxed);
+    p.inputDb = parameters.getRawParameterValue("input")->load(std::memory_order_relaxed);
+    p.tone = parameters.getRawParameterValue("tone")->load(std::memory_order_relaxed);
     p.airDb = parameters.getRawParameterValue("air")->load(std::memory_order_relaxed);
     p.drive = parameters.getRawParameterValue("drive")->load(std::memory_order_relaxed);
     p.crush = parameters.getRawParameterValue("crush")->load(std::memory_order_relaxed);

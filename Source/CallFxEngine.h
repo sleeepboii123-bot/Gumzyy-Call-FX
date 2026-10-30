@@ -9,6 +9,8 @@ struct CallFxParameters
 {
     int style = 0;             // 0 Angel, 1 Phone, 2 Radio, 3 Walkie, 4 Megaphone, 5 Broken
     float highPassHz = 80.0f;
+    float inputDb = 0.0f;        // -18..+18 dB before tone and saturation
+    float tone = 0.0f;          // -100..+100, broad low/high tilt
     float lowPassHz = 18000.0f;
     float airDb = 3.5f;
     float drive = 10.0f;        // 0..100
@@ -72,6 +74,7 @@ private:
     std::array<std::array<float, 2>, 2> hpState_ {};
     std::array<std::array<float, 2>, 2> lpState_ {};
     std::array<float, 2> airLowState_ {};
+    std::array<float, 2> toneLowState_ {};
     std::array<int, 2> crushCounter_ {};
     std::array<float, 2> crushedHold_ {};
 
@@ -80,7 +83,7 @@ private:
     std::array<std::array<Comb, 4>, 2> combs_;
     std::array<std::array<Allpass, 2>, 2> allpasses_;
 
-    Smoother hp_, lp_, air_, drive_, crush_, width_, reverb_, delay_, delayTime_, feedback_, mix_, outputGain_;
+    Smoother hp_, lp_, inputGain_, tone_, air_, drive_, crush_, width_, reverb_, delay_, delayTime_, feedback_, mix_, outputGain_;
     float inputPeak_ = 0.0f, outputPeak_ = 0.0f;
 };
 } // namespace gumzyy

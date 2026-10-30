@@ -1,18 +1,17 @@
-# Build status — GUMZYY CALL FX v0.1.0
+# Build status — GUMZYY CALL FX v0.2.0 WORKFLOW
 
-- [x] New, separate plugin identity and repository target.
-- [x] JUCE 8.0.6 VST3 project scaffold.
-- [x] GUMZYY artwork embedded as binary data.
-- [x] Six starting styles and exposed APVTS parameters.
-- [x] BIG / SMALL interface modes.
-- [x] Sample-by-sample filter, waveshaper, bit/sample reduction and stereo width.
-- [x] Preallocated wet-path delay and reverb buffers.
-- [x] Parameter smoothing and 0-sample host-latency declaration.
-- [x] DSP unit tests and Windows GitHub Actions workflow.
-- [x] Local C++ DSP tests passed (g++ with AddressSanitizer and UndefinedBehaviorSanitizer).
-- [ ] First Windows MSVC build passed.
-- [ ] Ableton Live scan and GUI verification.
-- [ ] Live monitoring/recording test at 44.1 and 48 kHz.
-- [ ] Listening checks of all six styles and automation.
+- [x] Retained the sample-by-sample DSP path from v0.1.0.
+- [x] Added Input Gain and Tone as automatable DSP parameters.
+- [x] Reworked the UI into a workflow-first layout with six quick character buttons.
+- [x] Added real input/output peak meters sourced from the audio processor.
+- [x] Added tooltips and double-click knob reset.
+- [x] Added controlled random variation per ad-lib character.
+- [x] Added A/B snapshots for comparing two full effect settings.
+- [x] Added reset-to-character and compact/full UI switching.
+- [x] Removed non-ASCII glyphs from interface labels to avoid Windows font/codepage artefacts.
+- [ ] Windows MSVC build and VST3 packaging.
+- [ ] Verify all parameters respond audibly in Ableton Live.
+- [ ] Check A/B, randomize, reset, automation, and UI resize in Ableton.
+- [ ] Listening tests for ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
 
-No sound-quality or CPU-performance claim should be considered final until the Windows build and DAW tests are completed.
+The engine keeps its zero-lookahead, sample-by-sample design and preallocated delay/reverb buffers. This is a zero-sample declared plugin latency path, not a claim of zero total recording latency. CPU and sound-quality checks still require a DAW session.

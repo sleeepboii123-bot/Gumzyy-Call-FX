@@ -18,6 +18,23 @@ float rms(const std::vector<float>& data, std::size_t start)
     for (std::size_t i = start; i < data.size(); ++i) { sum += data[i] * data[i]; ++count; }
     return count == 0 ? 0.0f : static_cast<float>(std::sqrt(sum / static_cast<double>(count)));
 }
+float renderSineRms(gumzyy::CallFxParameters params, double sampleRate, float frequency)
+{
+    gumzyy::CallFxEngine testEngine;
+    constexpr int blockSize = 128;
+    const int totalSamples = static_cast<int>(sampleRate);
+    std::vector<float> signal(static_cast<std::size_t>(totalSamples));
+    for (int i = 0; i < totalSamples; ++i)
+        signal[static_cast<std::size_t>(i)] = 0.05f * std::sin(2.0 * 3.141592653589793 * frequency * i / sampleRate);
+    testEngine.prepare(sampleRate, blockSize, 1);
+    for (int offset = 0; offset < totalSamples; offset += blockSize)
+    {
+        const int n = std::min(blockSize, totalSamples - offset);
+        float* channels[1] = { signal.data() + offset };
+        testEngine.process(channels, 1, n, params);
+    }
+    return rms(signal, static_cast<std::size_t>(sampleRate * 0.30));
+}
 }
 
 int main()
@@ -93,6 +110,27 @@ int main()
     }
     for (float x : left) require(std::isfinite(x), "left channel must remain finite");
     for (float x : right) require(std::isfinite(x), "right channel must remain finite");
+
+
+    // Input Gain is a real pre-effect gain control and should follow the requested dB change.
+    gumzyy::CallFxParameters gainParams;
+    gainParams.highPassHz = 20.0f; gainParams.lowPassHz = 20000.0f;
+    gainParams.airDb = 0.0f; gainParams.drive = 0.0f; gainParams.crush = 0.0f;
+    gainParams.width = 100.0f; gainParams.reverb = 0.0f; gainParams.delay = 0.0f;
+    gainParams.mix = 100.0f; gainParams.inputDb = 0.0f;
+    const float unityRms = renderSineRms(gainParams, sr, 440.0f);
+    gainParams.inputDb = 6.0f;
+    const float boostedRms = renderSineRms(gainParams, sr, 440.0f);
+    require(boostedRms > unityRms * 1.75f && boostedRms < unityRms * 2.2f,
+            "Input Gain should audibly apply approximately the requested +6 dB");
+
+    // Tone is a real low/high tilt, not a decorative control. Positive tone should brighten.
+    gainParams.inputDb = 0.0f; gainParams.tone = 100.0f;
+    const float brightToneRms = renderSineRms(gainParams, sr, 4200.0f);
+    gainParams.tone = -100.0f;
+    const float darkToneRms = renderSineRms(gainParams, sr, 4200.0f);
+    require(brightToneRms > darkToneRms * 1.65f,
+            "Tone control should audibly tilt high-frequency content");
 
     // Different common project sample rates and irregular block lengths must remain stable.
     for (double testRate : { 44100.0, 48000.0, 96000.0 })

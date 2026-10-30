@@ -114,6 +114,7 @@ void CallFxEngine::reset()
     for (auto& channel : hpState_) channel.fill(0.0f);
     for (auto& channel : lpState_) channel.fill(0.0f);
     airLowState_.fill(0.0f);
+    toneLowState_.fill(0.0f);
     crushCounter_.fill(0);
     crushedHold_.fill(0.0f);
     for (auto& buffer : delayBuffer_) std::fill(buffer.begin(), buffer.end(), 0.0f);
@@ -121,7 +122,8 @@ void CallFxEngine::reset()
     for (auto& channel : combs_) for (auto& comb : channel) comb.reset();
     for (auto& channel : allpasses_) for (auto& allpass : channel) allpass.reset();
 
-    hp_.reset(80.0f); lp_.reset(18000.0f); air_.reset(3.5f); drive_.reset(10.0f);
+    hp_.reset(80.0f); lp_.reset(18000.0f); inputGain_.reset(1.0f); tone_.reset(0.0f);
+    air_.reset(3.5f); drive_.reset(10.0f);
     crush_.reset(0.0f); width_.reset(140.0f); reverb_.reset(30.0f); delay_.reset(18.0f);
     delayTime_.reset(280.0f); feedback_.reset(24.0f); mix_.reset(100.0f); outputGain_.reset(1.0f);
     inputPeak_ = outputPeak_ = 0.0f;
@@ -136,6 +138,8 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
 
     hp_.setTarget(clampFinite(p.highPassHz, 20.0f, 1200.0f, 80.0f), rampSamples);
     lp_.setTarget(clampFinite(p.lowPassHz, 1000.0f, 20000.0f, 18000.0f), rampSamples);
+    inputGain_.setTarget(std::pow(10.0f, clampFinite(p.inputDb, -18.0f, 18.0f, 0.0f) / 20.0f), rampSamples);
+    tone_.setTarget(clampFinite(p.tone, -100.0f, 100.0f, 0.0f), rampSamples);
     air_.setTarget(clampFinite(p.airDb, 0.0f, 12.0f, 0.0f), rampSamples);
     drive_.setTarget(clampFinite(p.drive, 0.0f, 100.0f, 0.0f), rampSamples);
     crush_.setTarget(clampFinite(p.crush, 0.0f, 100.0f, 0.0f), rampSamples);
@@ -156,6 +160,8 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
     {
         const float hpCut = hp_.next();
         const float lpCut = std::max(lp_.next(), hpCut * 1.35f);
+        const float inputGain = inputGain_.next();
+        const float toneAmount = tone_.next();
         const float airDb = air_.next();
         const float driveAmount = drive_.next();
         const float crushAmount = std::min(100.0f, crush_.next() + styleCrush[style]);
@@ -170,6 +176,10 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
         const float hpAlpha = onePoleAlpha(hpCut, static_cast<float>(sampleRate_));
         const float lpAlpha = onePoleAlpha(lpCut, static_cast<float>(sampleRate_));
         const float airAlpha = onePoleAlpha(6200.0f, static_cast<float>(sampleRate_));
+        const float toneAlpha = onePoleAlpha(850.0f, static_cast<float>(sampleRate_));
+        const float toneDb = toneAmount * 0.075f;
+        const float toneHighGain = std::exp2(toneDb * 0.5f * 0.1660964f);
+        const float toneLowGain = std::exp2(-toneDb * 0.5f * 0.1660964f);
         const float airGain = (std::pow(10.0f, airDb / 20.0f) - 1.0f) * 0.62f;
         const float driveGain = 1.0f + driveAmount * 0.035f * styleDrive[style];
         const int bitDepth = std::max(4, 16 - static_cast<int>(std::round(crushAmount * 0.12f)));
@@ -187,7 +197,13 @@ void CallFxEngine::process(float* const* channelData, int channels, int numSampl
             const float dry = channelData[ch][n];
             drySample[ch] = dry;
             inPeak = std::max(inPeak, std::abs(dry));
-            float x = dry;
+            float x = dry * inputGain;
+
+            // Broad zero-latency tilt: positive values brighten, negative values add body.
+            auto& toneLow = toneLowState_[static_cast<std::size_t>(ch)];
+            toneLow += toneAlpha * (x - toneLow);
+            const float toneHigh = x - toneLow;
+            x = toneLow * toneLowGain + toneHigh * toneHighGain;
 
             // Two one-pole sections per side give steeper, stable analogue-style filters.
             auto& hs = hpState_[static_cast<std::size_t>(ch)];

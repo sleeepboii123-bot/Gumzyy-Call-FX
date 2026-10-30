@@ -1,13 +1,20 @@
-GUMZYY CALL FX v0.1.0 — EMPEZAMOS
+GUMZYY CALL FX v0.2.0 - WORKFLOW UPDATE
 
-1) Extrae este ZIP en una carpeta nueva. No lo mezcles con OFF SESSION TUNE.
-2) Ejecuta Publish-To-GitHub.bat. Si ya habias probado una copia anterior y fallo en gh repo view, usa esta version corregida del ZIP.
-3) El script crea un repositorio independiente: sleeepboii123-bot/Gumzyy-Call-FX
-4) Abre GitHub Actions y espera a que termine la compilación Windows y los tests DSP.
-5) Descarga el artefacto GUMZYY-CALL-FX-Windows-x64-VST3 del build exitoso.
-6) Extrae el artefacto y ejecuta Install-GUMZYY-CALL-FX.bat.
+1) Extract this ZIP into a new folder. Do not mix it with OFF SESSION TUNE or v0.1.0.
+2) Run Publish-To-GitHub.bat. The helper reuses sleeepboii123-bot/Gumzyy-Call-FX and pushes the updated project files to main.
+3) Open the repository Actions tab and wait for the Windows x64 build and DSP tests.
+4) Download GUMZYY-CALL-FX-v0.2.0-Windows-x64-VST3 from the successful run.
+5) Extract the artifact and double-click Install-GUMZYY-CALL-FX.bat. The installer requests administrator permission automatically.
+6) Restart Ableton Live or rescan VST3 plug-ins.
+
+WORKFLOW UPDATES:
+- Six one-click ad-lib character chains: ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
+- Input Gain and Tone are real DSP controls and are automatable in Ableton.
+- Live IN/OUT peak meters.
+- A/B settings comparison, controlled RANDOM, RESET and BIG/SMALL view.
+- Tooltips and double-click knob reset.
 
 LOW LATENCY:
-El motor está diseñado para declarar 0 muestras de latencia del plugin. Delay y Reverb son efectos intencionales en la ruta wet; no retrasan la ruta dry. Todavía hay que medir CPU, comprobar la compilación Windows y probarlo en Ableton con tu buffer.
+The engine keeps a sample-by-sample, zero-lookahead design and declares 0 samples of plugin latency. Delay and reverb are intentional effects on the wet path; they do not delay the direct path. This is not a claim of zero total recording latency. CPU load, stability, sound quality and the JUCE editor still need Windows/Ableton verification.
 
-La versión 0.1.0 es la primera base experimental, no un producto terminado.
+The installer now requests administrator permission before copying to the protected Common Files VST3 folder.

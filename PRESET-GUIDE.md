@@ -49,3 +49,14 @@ Designed for airy layers and wide ad-libs. It does not pitch-shift the vocal upw
 - Keep Mix at 100% when inserting on an ad-lib track; use a send/return for parallel use.
 - Check Width in mono. Very wide settings can weaken the centre when summed.
 - Keep the DAW's input peak healthy; do not clip the interface before the plugin.
+
+
+## Workflow controls in v0.2.0
+
+- Character buttons load a useful starting chain. Adjust the knobs after loading; the buttons are starting points, not locked algorithms.
+- RANDOM generates a bounded variation around the selected character.
+- RESET returns the selected character to its starting values.
+- A/B stores the current setup as A, captures your edited setup as B, then switches between them. After changing either side, press A/B again to update that side before switching.
+- Double-click any knob to restore its default value.
+- Input and output meters show live block peak levels. They are peak indicators, not LUFS meters.
+- Input Gain changes the level before tone and saturation. Tone is a broad low/high tilt. Both are exposed as host-automatable DSP parameters.
