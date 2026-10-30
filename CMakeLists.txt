@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(GUMZYY_CALL_FX VERSION 0.3.0 LANGUAGES CXX)
+project(GUMZYY_CALL_FX VERSION 0.3.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,7 +14,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(JUCE)
 
-juce_add_binary_data(GumzyyBinaryData SOURCES Assets/gumzyy.png Assets/phone-banner.png)
+juce_add_binary_data(GumzyyBinaryData SOURCES Assets/gumzyy.png Assets/phone_banner.png)
 
 juce_add_plugin(GUMZYY_CALL_FX
     COMPANY_NAME "NYXV x OFF SESSION"

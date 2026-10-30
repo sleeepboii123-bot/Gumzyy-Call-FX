@@ -1,4 +1,4 @@
-# GUMZYY CALL FX v0.3.0 - WORKFLOW UPDATE
+# GUMZYY CALL FX v0.3.1 - WORKFLOW UPDATE
 
 **NYXV × OFF SESSION — AD-LIB COLOR LAB**
 
@@ -47,7 +47,7 @@ Requirements: Git for Windows, GitHub CLI (`gh`) authenticated to GitHub, and a 
 2. Run `Publish-To-GitHub.bat`.
 3. The helper creates a new public repository named `sleeepboii123-bot/Gumzyy-Call-FX` if it does not exist, then pushes the project. It does not modify the former OFF-SESSION-TUNE repository.
 4. Open the repository's Actions tab and wait for the Windows x64 build and DSP tests.
-5. Download `GUMZYY-CALL-FX-v0.3.0-FINAL-Windows-x64-VST3` from the successful run.
+5. Download `GUMZYY-CALL-FX-v0.3.1-FINAL-Windows-x64-VST3` from the successful run.
 6. Extract the artifact and run `Install-GUMZYY-CALL-FX.bat`.
 
 ## Licensing note
@@ -56,12 +56,12 @@ JUCE 8.0.6 is dual-licensed under AGPLv3 or a commercial JUCE licence. Review th
 
 ## Project status
 
-This is **v0.3.0 — workflow update source candidate**. The DSP engine retains the v0.1.0 sample-by-sample path. Local DSP tests cover zero reported latency, dry-path integrity, phone filtering, crush stability, stereo processing and common sample rates. The updated JUCE editor still requires a Windows MSVC build, installation and listening/automation verification in Ableton Live.
+This is **v0.3.1 — workflow update source candidate**. The DSP engine retains the v0.1.0 sample-by-sample path. Local DSP tests cover zero reported latency, dry-path integrity, phone filtering, crush stability, stereo processing and common sample rates. The updated JUCE editor still requires a Windows MSVC build, installation and listening/automation verification in Ableton Live.
 
 The Windows installer now requests administrator permission automatically, waits for the elevated install to finish and returns its exit status.
 
 
-## v0.3.0 Final design update
+## v0.3.1 Final design update
 
 - Rebuilt the real JUCE editor around the accepted telephone-console concept: receiver + call display artwork, integrated GUMZYY artwork, six large character buttons, four clearly separated effect modules, and a dedicated global mix / meter footer.
 - Added a dedicated SHIMMER control. It is a zero-latency high-band harmonic exciter (not a pitch shifter) and is exposed to Ableton automation.
@@ -78,3 +78,8 @@ The workflow combines fast vocal-character selection, a no-submenu wet-effects a
 
 - Local DSP tests include dry-path identity, phone filtering, input gain, tone tilt, shimmer response, crush stability and 44.1 / 48 / 96 kHz processing.
 - A Windows MSVC build and Ableton listening / CPU checks must be confirmed by the next GitHub Actions run and DAW test before calling the new release production-ready.
+
+
+## v0.3.1 compiler-fix patch
+
+This patch renames the embedded phone banner asset to `phone_banner.png` so JUCE generates the expected `BinaryData::phone_banner_png` identifier, and removes `const` from the temporary title rectangle that is consumed by `removeFromLeft()`. No audio-engine latency or effect topology changes are made.

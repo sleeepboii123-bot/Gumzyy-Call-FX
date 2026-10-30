@@ -21,7 +21,7 @@ function Require-Command([string]$name) {
 
 Write-Host 'GUMZYY CALL FX - Publish project to GitHub' -ForegroundColor Magenta
 Write-Host "Target repository: $repo" -ForegroundColor Cyan
-Write-Host 'This is a NEW repository and will not modify OFF-SESSION-TUNE.'
+Write-Host 'This updates only the existing Gumzyy-Call-FX repository; OFF-SESSION-TUNE is untouched.'
 Refresh-Path
 Require-Command 'git'
 Require-Command 'gh'
@@ -76,6 +76,10 @@ Write-Host 'Copying source files...' -ForegroundColor Yellow
 Get-ChildItem -LiteralPath $source -Force | Where-Object { $_.Name -notin @('.git', 'build', 'release') } | ForEach-Object {
     Copy-Item -LiteralPath $_.FullName -Destination $work -Recurse -Force
 }
+# Remove the previous hyphenated resource filename so the repository contains only
+# the new C++-identifier-safe Assets/phone_banner.png asset.
+$obsoleteBanner = Join-Path $work 'Assets\phone-banner.png'
+if (Test-Path $obsoleteBanner) { Remove-Item -LiteralPath $obsoleteBanner -Force }
 
 Push-Location $work
 try {
@@ -90,7 +94,7 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Host 'Repository already contains the exact project files.' -ForegroundColor Green
     } else {
-        & git commit -m 'Update GUMZYY CALL FX v0.3.0 final telephone UI and shimmer DSP'
+        & git commit -m 'Update GUMZYY CALL FX v0.3.1 compile fixes'
         if ($LASTEXITCODE -ne 0) { throw 'Git commit failed.' }
         & git push origin HEAD:main
         if ($LASTEXITCODE -ne 0) { throw 'Git push failed.' }

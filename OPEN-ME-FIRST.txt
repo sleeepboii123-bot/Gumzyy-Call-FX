@@ -1,13 +1,13 @@
-GUMZYY CALL FX v0.3.0 - WORKFLOW UPDATE
+GUMZYY CALL FX v0.3.1 - FINAL DESIGN COMPILE FIX
 
-1) Extract this ZIP into a new folder. Do not mix it with OFF SESSION TUNE or v0.1.0.
+1) Extract this ZIP into a new folder. Do not mix it with OFF SESSION TUNE or earlier GUMZYY folders.
 2) Run Publish-To-GitHub.bat. The helper reuses sleeepboii123-bot/Gumzyy-Call-FX and pushes the updated project files to main.
 3) Open the repository Actions tab and wait for the Windows x64 build and DSP tests.
-4) Download GUMZYY-CALL-FX-v0.3.0-FINAL-Windows-x64-VST3 from the successful run.
+4) Download GUMZYY-CALL-FX-v0.3.1-FINAL-Windows-x64-VST3 from the successful run.
 5) Extract the artifact and double-click Install-GUMZYY-CALL-FX.bat. The installer requests administrator permission automatically.
 6) Restart Ableton Live or rescan VST3 plug-ins.
 
-FINAL DESIGN UPDATES:
+FINAL DESIGN:
 - The real JUCE window is rebuilt around the retro telephone handset, call display and GUMZYY artwork.
 - Six large one-click character chains: ANGEL, PHONE, RADIO, WALKIE, MEGA and BROKEN.
 - Four large modules: VOICE/FILTER, ANGEL/STEREO, COLOR/GRIT and SPACE/ECHO.
@@ -15,6 +15,10 @@ FINAL DESIGN UPDATES:
 - Big readable controls, numerical value boxes, live IN/OUT meters and a global wet/dry slider.
 - A/B snapshots, DICE variation, RESET, BYPASS, BIG/SMALL, tooltips and double-click knob reset.
 - Every visible knob controls a real DSP parameter and is host-automatable.
+
+v0.3.1 BUILD FIXES:
+- Renamed the banner asset to Assets/phone_banner.png so JUCE generates BinaryData::phone_banner_png and phone_banner_pngSize as referenced by the editor.
+- Changed the title-area JUCE Rectangle to a mutable local before calling removeFromLeft().
 
 LOW LATENCY:
 The engine keeps a sample-by-sample, zero-lookahead design and declares 0 samples of plugin latency. Delay and reverb are intentional effects on the wet path; they do not delay the direct path. This is not a claim of zero total recording latency. CPU load, stability, sound quality and the JUCE editor still need Windows/Ableton verification.

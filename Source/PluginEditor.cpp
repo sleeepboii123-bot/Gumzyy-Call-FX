@@ -373,7 +373,7 @@ void GumzyyCallFXAudioProcessorEditor::drawModule(juce::Graphics& g, juce::Recta
     auto strip = bounds.removeFromTop(4.0f);
     g.setColour(violet.withAlpha(0.7f));
     g.fillRoundedRectangle(strip, 2.0f);
-    const auto titleArea = juce::Rectangle<float>(bounds.getX() + 14.0f, bounds.getY() + 9.0f,
+    auto titleArea = juce::Rectangle<float>(bounds.getX() + 14.0f, bounds.getY() + 9.0f,
                                                   bounds.getWidth() - 28.0f, 19.0f);
     g.setColour(violet);
     g.setFont(juce::Font(juce::FontOptions(9.0f, juce::Font::bold)));
