@@ -138,6 +138,28 @@ void GumzyyLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& bu
     }
 }
 
+juce::Font GumzyyLookAndFeel::getTextButtonFont(juce::TextButton&, int buttonHeight)
+{
+    const auto fontSize = juce::jlimit(10.0f, 16.0f, static_cast<float>(buttonHeight) * 0.36f);
+    return juce::Font(juce::FontOptions(fontSize, juce::Font::bold));
+}
+
+void GumzyyLookAndFeel::drawButtonText(juce::Graphics& g, juce::TextButton& button,
+                                      bool, bool)
+{
+    const bool active = button.getToggleState();
+    const auto colourId = active ? juce::TextButton::textColourOnId
+                                 : juce::TextButton::textColourOffId;
+    auto textColour = button.findColour(colourId);
+    if (!button.isEnabled())
+        textColour = textColour.withAlpha(0.42f);
+
+    g.setColour(textColour);
+    g.setFont(getTextButtonFont(button, button.getHeight()));
+    g.drawFittedText(button.getButtonText(), button.getLocalBounds().reduced(7, 2),
+                     juce::Justification::centred, 1);
+}
+
 GumzyyCallFXAudioProcessorEditor::GumzyyCallFXAudioProcessorEditor(GumzyyCallFXAudioProcessor& p)
     : AudioProcessorEditor(&p), processor_(p),
       phoneBanner_(juce::ImageCache::getFromMemory(BinaryData::phone_banner_png,

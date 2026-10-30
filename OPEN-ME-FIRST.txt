@@ -1,9 +1,9 @@
-GUMZYY CALL FX v0.3.1 - FINAL DESIGN COMPILE FIX
+GUMZYY CALL FX v0.3.2 - FINAL DESIGN COMPILE FIX
 
 1) Extract this ZIP into a new folder. Do not mix it with OFF SESSION TUNE or earlier GUMZYY folders.
 2) Run Publish-To-GitHub.bat. The helper reuses sleeepboii123-bot/Gumzyy-Call-FX and pushes the updated project files to main.
 3) Open the repository Actions tab and wait for the Windows x64 build and DSP tests.
-4) Download GUMZYY-CALL-FX-v0.3.1-FINAL-Windows-x64-VST3 from the successful run.
+4) Download GUMZYY-CALL-FX-v0.3.2-FINAL-Windows-x64-VST3 from the successful run.
 5) Extract the artifact and double-click Install-GUMZYY-CALL-FX.bat. The installer requests administrator permission automatically.
 6) Restart Ableton Live or rescan VST3 plug-ins.
 
@@ -16,7 +16,7 @@ FINAL DESIGN:
 - A/B snapshots, DICE variation, RESET, BYPASS, BIG/SMALL, tooltips and double-click knob reset.
 - Every visible knob controls a real DSP parameter and is host-automatable.
 
-v0.3.1 BUILD FIXES:
+v0.3.2 BUILD FIXES:
 - Renamed the banner asset to Assets/phone_banner.png so JUCE generates BinaryData::phone_banner_png and phone_banner_pngSize as referenced by the editor.
 - Changed the title-area JUCE Rectangle to a mutable local before calling removeFromLeft().
 

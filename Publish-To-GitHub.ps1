@@ -94,7 +94,7 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Host 'Repository already contains the exact project files.' -ForegroundColor Green
     } else {
-        & git commit -m 'Update GUMZYY CALL FX v0.3.1 compile fixes'
+        & git commit -m 'Fix GUMZYY CALL FX v0.3.2 button LookAndFeel linker symbols'
         if ($LASTEXITCODE -ne 0) { throw 'Git commit failed.' }
         & git push origin HEAD:main
         if ($LASTEXITCODE -ne 0) { throw 'Git push failed.' }

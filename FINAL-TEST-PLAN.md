@@ -1,4 +1,4 @@
-# GUMZYY CALL FX v0.3.1 test plan
+# GUMZYY CALL FX v0.3.2 test plan
 
 ## Build and package
 
